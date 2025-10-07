@@ -22,14 +22,15 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install build backend
+
+      - name: Install Hatch
         run: |
           python -m pip install --upgrade pip
-          pip install build
+          pip install hatch
 
       - name: Build sdist and wheel
         run: |
-          python -m build
+          hatch build
 
       - name: Publish to PyPI
         if: startsWith(github.ref, 'refs/tags/v')

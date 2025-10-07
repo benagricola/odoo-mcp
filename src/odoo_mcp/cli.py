@@ -4,8 +4,7 @@ CLI interface for the Odoo MCP Server
 """
 
 import argparse
-import sys
-from pathlib import Path
+import os
 from . import __version__
 
 
@@ -42,6 +41,18 @@ Configuration:
         help="Show example VS Code MCP configuration"
     )
     
+    # Whitelist controls (comma-separated)
+    parser.add_argument(
+        "--write-allowed-models",
+        dest="write_allowed_models",
+        help="Comma-separated list of models allowed for create/write operations (overrides env)",
+    )
+    parser.add_argument(
+        "--allowed-methods",
+        dest="allowed_methods",
+        help="Comma-separated list of model.method allowed calls (overrides env)",
+    )
+
     args = parser.parse_args()
 
     if args.config_example:
@@ -51,6 +62,13 @@ Configuration:
     # Start the MCP server
     # Lazy import to avoid importing server module when only showing help/version
     from . import server
+
+    # If CLI provided overrides, set env vars before serve() loads them
+    if args.write_allowed_models:
+        os.environ["ODOO_WRITE_ALLOWED_MODELS"] = args.write_allowed_models
+    if args.allowed_methods:
+        os.environ["ODOO_ALLOWED_METHODS"] = args.allowed_methods
+
     server.serve()
 
 

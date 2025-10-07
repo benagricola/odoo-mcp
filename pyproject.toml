@@ -1,11 +1,12 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
 
 [project]
 name = "odoorpc-mcp"
-version = "0.1.1"
+# version is now managed by hatch-vcs
 description = "MCP server that exposes Odoo database records to LLMs via Model Context Protocol"
+dynamic = ["version"]
 readme = "README.md"
 requires-python = ">=3.12"
 license = { text = "MIT" }
@@ -47,3 +48,6 @@ odoorpc-mcp = "odoo_mcp.cli:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/odoo_mcp"]
+
+[tool.hatch.version]
+source = "vcs"
